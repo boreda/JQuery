@@ -1,0 +1,136 @@
+Is JQ a Library, Framework, lang- It is JS Library.
+
+IS JQ a W3 Standard - No
+
+Q: Can we have multiple document.ready() - YES
+A: //Valid code
+$(document).ready(function(){
+	alert("First Document");
+});
+$(document).ready(function(){
+	alert("Second Document");
+});
+$(document).ready(function(){
+	alert("Thrd Document");
+});
+//above code is Interpreted as
+$(document).ready(function(){
+	alert("First Document");
+	alert("Second Document");
+	alert("Thrd Document");
+});
+Imp Note:
+A function defined within one $(document).ready block cannot be called from another $(document).ready block,
+$(document).ready(function(){
+	alert("First Document");
+  function check(){
+		alert("function in frst doc");
+  }
+});
+$(document).ready(function(){
+	alert("Second Document");
+  //check(); throws an error and next doc.ready will not execute
+});
+$(document).ready(function(){
+	alert("Thrd Document");
+  check();
+});
+
+Q: Diff b/w body onload & doc ready
+A: The main differences between the two are: Body.Onload() event will be called only after the DOM and associated resources like images got loaded, but jQuery's document.ready() event will be called once the DOM is loaded i.e., it wont wait for the resources like images to get loaded.
+We can have multiple document.ready() in a page but Body.Onload() event cannot.
+
+Q: How to load JQuery using CDN
+A: <script
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+  </script>
+
+Q: How can we run/load JQuery locally when CDN Fails
+A: <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    if (typeof jQuery == 'undefined')
+    {
+      document.write(unescape("%3Cscript src='Scripts/jquery.1.5.1.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+  </script>
+  
+Q: Diff b/w .js & .min.js
+A: min.js - For PROD & Deployment
+
+Q: what are the fastest & slowest selectors in jquery
+A: When possible, avoid selectors that include jQuery extensions. These extensions cannot take advantage of the performance boost provided by the native querySelectorAll() DOM method and, therefore, require the use of the Sizzle selector engine provided by jQuery.
+  EX:
+   // Slower (the zero-based :even selector is a jQuery extension)
+  $( "#my-table tr:even" );
+  // Better, though not exactly equivalent
+  $( "#my-table tr:nth-child(odd)" );
+  Avoid Excessive Specificity
+  $( ".data table.attendees td.gonzalez" );
+  // Better: Drop the middle if possible.
+  $( ".data td.gonzalez" );
+  Beginning your selector with an ID is a safe bet.
+  // Fast:
+  $( "#container div.robotarm" );
+  // Super-fast:
+  $( "#container" ).find( "div.robotarm" );
+  Specificity
+  Be specific on the right-hand side of your selector, and less specific on the left.
+  // Unoptimized:
+  $( "div.data .gonzalez" ); 
+  // Optimized:
+  $( ".data td.gonzalez" );
+  
+Q: HOW JQUERY SELECTORS ARE EXECUTED?
+A: Your last selectors is always executed first. For example, in below jQuery code, jQuery will first find all the elements with class “.myCssClass” and after that it will reject all the other elements which are not in “p#elmID”.
+$(“p#elmID .myCssClass”);
+
+Q: Diff b/w this & $(this)
+A: this is the DOM object, whereas $(this) is the jQuery wrapper around same.
+When using this, you can call DOM methods on it, but not jQuery methods. When using $(this), you can call jQuery methods on it, but not DOM methods.
+EX:
+$(document).ready(function(){
+    $('#spnValue').mouseover(function(){
+       alert($(this).text());
+  });
+});
+$(document).ready(function(){
+    $('#spnValue').mouseover(function(){
+       alert(this.innerText);
+  });
+});
+Any idea about the difference?
+this and $(this) refers to the same element. The only difference is the way they are used. 'this' is used in traditional sense, when 'this' is wrapped in $() then it becomes a jQuery object and you are able to use the power of jQuery.
+In the second example, I have to use innerText() to show the text of the span element as this keyword is not a jQuery object yet. So I have to use the native JavaScript to get the value of span element. But once it is wrapped in $() then jQuery method text() is used to get the text of Span.
+So the summary is $(this) is a jQuery object and you can use the power and beauty of jQuery, but with 'this' keyword, one need to use native JavaScript.
+
+Q: How to check if a element is empty in JQuery
+A: We will use the same html() attribute to determine whether the element is empty or not.
+$(document).ready(function() {
+  if ($('#dvText').html()) 
+    alert('Proceed as element is not empty.');
+  }
+  else
+  {
+    alert('Element is empty');
+  }
+});
+Declare a div element "dvText" with no content like this.
+<div id="dvText"></div>
+But there is a problem here. If you declare your div like below given code, above jQuery code will not work because your div is no more empty. By default some spaces gets added.
+so we will use the trim function to trim the spaces from the begin and end of the html() attribute.
+$(document).ready(function() {
+  if ($('#dvText').html().trim()) {
+    alert('Proceed as element is not empty.');
+  }
+  else
+  {
+    alert('Element is empty');
+  }
+});
+
+Q: How to check if a elem exists in JQuery
+A: if ( $( "selector" ).length ) {
+//code here 
+}
+Q: Diff b/w checking an element is empty or exists in JQuery
+A: Refere abve 2 ans
